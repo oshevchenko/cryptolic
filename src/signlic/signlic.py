@@ -40,6 +40,14 @@ class SignLic:
 
 
     def rsa_sign_data(self, data):
+        """
+        RSA signing of data
+        Args:
+            data (byte-array): The data to be signed
+        Returns:
+            signature (byte-array): RSA signature of the data
+            None: if signing failed
+        """
         signature = None
         try:
             signer = pkcs1_15.new(RSA.import_key(self.rsa_private_key))
