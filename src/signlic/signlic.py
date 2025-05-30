@@ -30,18 +30,22 @@ class SignLic:
             True: checks passed
         """
         ret = True
-        verifier = pkcs1_15.new(RSA.import_key(self.rsa_public_key))
         try:
+            verifier = pkcs1_15.new(RSA.import_key(self.rsa_public_key))
             verifier.verify(SHA256.new(data), signature)
-        except (ValueError, TypeError):
-            logger.error("RSA signature verification failed!")
+        except (ValueError, TypeError) as e:
+            logger.error(f"RSA signature verification failed: {e}")
             ret = False
         return ret
 
 
     def rsa_sign_data(self, data):
-        signer = pkcs1_15.new(RSA.import_key(self.rsa_private_key))
-        signature = signer.sign(SHA256.new(data))
+        signature = None
+        try:
+            signer = pkcs1_15.new(RSA.import_key(self.rsa_private_key))
+            signature = signer.sign(SHA256.new(data))
+        except (ValueError, TypeError) as e:
+            logger.error(f"RSA signing failed: {e}")
         return signature
 
 
