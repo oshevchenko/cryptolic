@@ -29,13 +29,13 @@ class SignLic:
             False: checks failed
             True: checks passed
         """
-        ret = True
+        ret = False
         try:
             verifier = pkcs1_15.new(RSA.import_key(self.rsa_public_key))
             verifier.verify(SHA256.new(data), signature)
+            ret = True
         except (ValueError, TypeError) as e:
             logger.error(f"RSA signature verification failed: {e}")
-            ret = False
         return ret
 
 
